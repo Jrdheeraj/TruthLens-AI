@@ -125,8 +125,11 @@ async def verify_video(file: UploadFile = File(...)):
     temp_video_path = temp_video.name
     
     try:
-        content = await file.read()
-        temp_video.write(content)
+        while True:
+            chunk = await file.read(1024 * 1024)
+            if not chunk:
+                break
+            temp_video.write(chunk)
         temp_video.close()
         
         print(f"VIDEO ENDPOINT: Processing video {file.filename}")
@@ -196,5 +199,9 @@ async def verify_video(file: UploadFile = File(...)):
         )
         
     finally:
+        try:
+            temp_video.close()
+        except Exception:
+            pass
         if os.path.exists(temp_video_path):
             os.remove(temp_video_path)

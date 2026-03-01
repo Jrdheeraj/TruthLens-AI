@@ -1,4 +1,6 @@
 import os
+import re
+from datetime import datetime, timezone
 import google.generativeai as genai
 
 from app.core.config import HOAX_PATTERNS, REFUTATION_KEYWORDS, SUPPORT_KEYWORDS
@@ -21,6 +23,11 @@ def detect_hoax_risk(claim: str) -> tuple[bool, str]:
             return (True, pattern)
     return (False, "")
 
+
+def _contains_keyword(text: str, keyword: str) -> bool:
+    pattern = r"\b" + re.escape(keyword.lower()) + r"\b"
+    return re.search(pattern, text) is not None
+
 def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = None) -> dict:
     print("USING HYPER-RELIABLE LLM EVALUATOR")
     is_hoax_risk, hoax_pattern = detect_hoax_risk(claim)
@@ -31,6 +38,7 @@ def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = Non
     
     if API_KEY:
         last_err = None
+        today_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         for model_name in MODEL_NAMES:
             try:
                 print(f"DEBUG: Attempting analysis with {model_name}...")
@@ -43,8 +51,7 @@ def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = Non
                     image_info = f"\nIMAGE/VIDEO CONTEXT: OCR='{ocr}', Caption='{caption}', Flags='{red_flags}'"
                 
                 prompt = f"""
-                TruthLens AI Investigative Agent. Date: Jan 24, 2026.
-                Today: Donald Trump is US President (re-elected 2024).
+                TruthLens AI Investigative Agent. Date (UTC): {today_utc}.
                 
                 CLAIM: "{claim}"
                 SEARCH EVIDENCE: "{evidence[:4200]}" {image_info}
@@ -64,15 +71,18 @@ def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = Non
                 
                 verdict = "NO_EVIDENCE"
                 explanation = "Direct knowledge analysis."
-                for line in text.split('\n'):
-                    if "Verdict:" in line: verdict = line.split("Verdict:")[1].strip().upper()
-                    if "Explanation:" in line: explanation = line.split("Explanation:")[1].strip()
+                verdict_match = re.search(r"verdict\s*:\s*([A-Za-z_ ]+)", text, flags=re.IGNORECASE)
+                explanation_match = re.search(r"explanation\s*:\s*(.+)", text, flags=re.IGNORECASE | re.DOTALL)
+                if verdict_match:
+                    verdict = verdict_match.group(1).strip().upper()
+                if explanation_match:
+                    explanation = explanation_match.group(1).strip()
                 
                 # Enhanced mapping for positive/negative signals
                 # CORE FIX: Reinterpret NO_EVIDENCE as IMPLICITLY_SUPPORTED for coherent evidence
                 v_upper = verdict.upper()
-                has_refutation = any(x in ev_text for x in REFUTATION_KEYWORDS)
-                has_support = any(x in ev_text for x in SUPPORT_KEYWORDS)
+                has_refutation = any(_contains_keyword(ev_text, x) for x in REFUTATION_KEYWORDS)
+                has_support = any(_contains_keyword(ev_text, x) for x in SUPPORT_KEYWORDS)
                 is_coherent = len(ev_text) > 100
                 
                 if any(x in v_upper for x in ["SUPPORTED", "TRUE", "FACT", "REAL", "AUTHENTIC"]):
@@ -82,7 +92,7 @@ def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = Non
                 elif "HOAX" in v_upper:
                     verdict = "HOAX"
                 elif "NO_EVIDENCE" in v_upper:
-                    if is_coherent and not has_refutation:
+                    if is_coherent and has_support and not has_refutation:
                         print("DEBUG: Reinterpreting NO_EVIDENCE as IMPLICITLY_SUPPORTED (Consensus/Coherent)")
                         verdict = "IMPLICITLY_SUPPORTED"
                     else:
@@ -99,17 +109,17 @@ def evaluate_claim_with_llm(claim: str, evidence: str, image_context: dict = Non
         print(f"LLM Critical Failure. Error: {last_err}. Running Smart Heuristic.")
 
     # Smart Heuristic Fallback (Detects both positive and negative)
-    if any(word in ev_text for word in REFUTATION_KEYWORDS):
+    if any(_contains_keyword(ev_text, word) for word in REFUTATION_KEYWORDS):
         return {"status": "CONTRADICTED", "explanation": "Credible external sources and fact-checkers have explicitly refuted this claim as false."}
     
     if is_hoax_risk:
         return {"status": "HOAX", "explanation": f"Claim triggers hoax pattern '{hoax_pattern}' without support."}
 
     # Detect positive corroboration
-    support_hits = [word for word in SUPPORT_KEYWORDS if word in ev_text]
+    support_hits = [word for word in SUPPORT_KEYWORDS if _contains_keyword(ev_text, word)]
     
     # New: Word Overlap heuristic for established facts
-    significant_claim_words = [w for w in claim_words if len(w) >= 3]
+    significant_claim_words = [w for w in re.findall(r"\b[a-zA-Z]{3,}\b", claim.lower())]
     overlap_count = sum(1 for w in significant_claim_words if w in ev_text)
     print(f"DEBUG: Word overlap count: {overlap_count} for words {significant_claim_words}")
     

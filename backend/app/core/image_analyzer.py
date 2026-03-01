@@ -58,7 +58,7 @@ def analyze_image(file: UploadFile) -> dict:
     try:
         file.file.seek(0)
         image = Image.open(io.BytesIO(file.file.read())).convert("RGB")
-    except UnidentifiedImageError:
+    except (UnidentifiedImageError, OSError, ValueError):
         raise HTTPException(422, "Invalid image")
 
     ocr_text = ""

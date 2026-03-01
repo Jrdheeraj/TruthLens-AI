@@ -23,6 +23,11 @@ def final_verdict(text_results=None, image_results=None, cross_modal_score=None)
     has_hoax_signals = False
     claims_with_hoax_patterns = []
 
+    supported_count = 0
+    partial_count = 0
+    contradicted_count = 0
+    hoax_count = 0
+
     if text_results:
         for r in text_results:
             status = r.get("status")
@@ -40,19 +45,29 @@ def final_verdict(text_results=None, image_results=None, cross_modal_score=None)
                 has_hoax_signals = True
                 print(f"VERDICT ENGINE DEBUG: Hoax indicator found in explanation")
             
-            if status == "HOAX" or status == "CONTRADICTED":
-                llm_verdict = "LIKELY FAKE"
+            if status == "HOAX":
+                hoax_count += 1
                 has_hoax_signals = True
-                print(f"VERDICT ENGINE DEBUG: HOAX/CONTRADICTED status detected")
+                print(f"VERDICT ENGINE DEBUG: HOAX status detected")
+            elif status == "CONTRADICTED":
+                contradicted_count += 1
+                has_hoax_signals = True
+                print(f"VERDICT ENGINE DEBUG: CONTRADICTED status detected")
             elif status in ["SUPPORTED", "IMPLICITLY_SUPPORTED"]:
-                llm_verdict = "LIKELY TRUE"
+                supported_count += 1
             elif status == "PARTIALLY_SUPPORTED":
-                llm_verdict = "MISLEADING"
+                partial_count += 1
             elif status == "NO_EVIDENCE":
                 if detect_hoax_in_claim(claim):
                     print(f"VERDICT ENGINE DEBUG: NO_EVIDENCE + Hoax Pattern = LIKELY FAKE")
-                    llm_verdict = "LIKELY FAKE"
                     has_hoax_signals = True
+
+        if hoax_count > 0 or contradicted_count > 0:
+            llm_verdict = "LIKELY FAKE"
+        elif partial_count > 0:
+            llm_verdict = "MISLEADING"
+        elif supported_count > 0:
+            llm_verdict = "LIKELY TRUE"
                 
     if image_results:
         visual_risk = image_results.get("image_risk_score", image_results.get("visual_risk_score", 0.0))
@@ -99,7 +114,7 @@ def final_verdict(text_results=None, image_results=None, cross_modal_score=None)
         claims_text = " ".join([r.get("claim", "") for r in text_results]).lower()
         
         # Simple mismatch detector: high visual risk + positive text claim
-        visual_risk = image_results.get("image_risk_score", 0.0)
+        visual_risk = image_results.get("image_risk_score", image_results.get("visual_risk_score", 0.0))
         has_positive_claim = any(r.get("status") == "SUPPORTED" for r in text_results)
         
         if visual_risk > 0.6 and has_positive_claim:
@@ -130,9 +145,9 @@ def final_verdict(text_results=None, image_results=None, cross_modal_score=None)
         source_count = 1
         if text_results:
             is_implicit = any(r.get("status") == "IMPLICITLY_SUPPORTED" for r in text_results)
-            primary_source = text_results[0].get("source", "")
-            if "+" in primary_source:
-                source_count = 2
+            primary_sources = text_results[0].get("sources", [])
+            if isinstance(primary_sources, list):
+                source_count = max(1, len([s for s in primary_sources if isinstance(s, dict)]))
         
             # CORE FIX: Truth-Consensus Override
             if is_implicit or (verdict == "LIKELY TRUE" and source_count >= 1):

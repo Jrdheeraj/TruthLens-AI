@@ -14,52 +14,53 @@ def analyze_audio(video_path: str) -> dict:
             from moviepy.editor import VideoFileClip
             
             clip = VideoFileClip(video_path)
-            
-            if clip.audio is None:
-                print("AUDIO ANALYZER: No audio track found")
-                clip.close()
-                return {
-                    'audio_risk_score': 0.0,
-                    'has_audio': False,
-                    'risk_factors': []
-                }
-            
-            has_audio = True
-            
-            temp_audio = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
-            temp_audio_path = temp_audio.name
-            temp_audio.close()
-            
-            clip.audio.write_audiofile(temp_audio_path, verbose=False, logger=None)
-            clip.close()
-            
+            temp_audio_path = None
+
             try:
-                import librosa
+                if clip.audio is None:
+                    print("AUDIO ANALYZER: No audio track found")
+                    return {
+                        'audio_risk_score': 0.0,
+                        'has_audio': False,
+                        'risk_factors': []
+                    }
                 
-                y, sr = librosa.load(temp_audio_path, sr=None)
+                has_audio = True
                 
-                spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
-                centroid_var = np.var(spectral_centroid)
+                temp_audio = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
+                temp_audio_path = temp_audio.name
+                temp_audio.close()
                 
-                if centroid_var < 1000:
-                    risk_score += 0.3
-                    risk_factors.append("Unnaturally consistent spectral pattern (synthetic voice)")
+                clip.audio.write_audiofile(temp_audio_path, verbose=False, logger=None)
                 
-                zero_crossings = librosa.zero_crossings(y)
-                zcr_rate = np.sum(zero_crossings) / len(y)
-                
-                if zcr_rate > 0.2:
-                    risk_score += 0.2
-                    risk_factors.append("High zero-crossing rate (audio artifacts)")
-                
-                print(f"AUDIO ANALYZER: Spectral analysis complete, risk={risk_score:.2f}")
-                
-            except ImportError:
-                print("AUDIO ANALYZER: librosa not available, skipping spectral analysis")
-                risk_score = 0.0
-            
-            if os.path.exists(temp_audio_path):
-                os.remove(temp_audio_path)
+                try:
+                    import librosa
+                    
+                    y, sr = librosa.load(temp_audio_path, sr=None)
+                    
+                    spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+                    centroid_var = np.var(spectral_centroid)
+                    
+                    if centroid_var < 1000:
+                        risk_score += 0.3
+                        risk_factors.append("Unnaturally consistent spectral pattern (synthetic voice)")
+                    
+                    zero_crossings = librosa.zero_crossings(y)
+                    zcr_rate = np.sum(zero_crossings) / len(y)
+                    
+                    if zcr_rate > 0.2:
+                        risk_score += 0.2
+                        risk_factors.append("High zero-crossing rate (audio artifacts)")
+                    
+                    print(f"AUDIO ANALYZER: Spectral analysis complete, risk={risk_score:.2f}")
+                    
+                except ImportError:
+                    print("AUDIO ANALYZER: librosa not available, skipping spectral analysis")
+                    risk_score = 0.0
+            finally:
+                clip.close()
+                if temp_audio_path and os.path.exists(temp_audio_path):
+                    os.remove(temp_audio_path)
                 
         except ImportError:
             print("AUDIO ANALYZER: moviepy not available, skipping audio analysis")

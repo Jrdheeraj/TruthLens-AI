@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import traceback
+import os
 from app.api.verify import router as verify_router
 
 app = FastAPI(
@@ -22,9 +23,13 @@ app.add_middleware(
 async def global_exception_handler(request: Request, exc: Exception):
     print(f"CRITICAL ERROR: {exc}")
     traceback.print_exc()
+    show_traceback = os.getenv("DEBUG_TRACEBACK", "").lower() in {"1", "true", "yes"}
+    content = {"detail": "Internal server error"}
+    if show_traceback:
+        content["traceback"] = traceback.format_exc()
     return JSONResponse(
         status_code=500,
-        content={"detail": str(exc), "traceback": traceback.format_exc()},
+        content=content,
     )
 
 app.include_router(verify_router, prefix="/api")
