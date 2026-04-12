@@ -28,43 +28,37 @@ const useCases = [
   },
 ];
 
-const UseCases = () => {
+export default function SiteUseCases() {
   return (
-    <section id="use-cases" className="py-24">
-      <div className="container mx-auto px-6">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-sm font-medium text-primary tracking-wide uppercase mb-4">
+    <section id="use-cases" className="border-b border-white/10 bg-tl-elevated py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="font-mono text-[11px] font-medium tracking-[0.2em] text-violet-400/90 uppercase">
             Applications
           </h2>
-          <h3 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+          <h3 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-white md:text-4xl lg:text-5xl">
             Real-World Impact
           </h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="mt-4 text-base text-zinc-400 md:text-lg">
             Trusted by professionals who need reliable truth verification at scale.
           </p>
         </div>
 
-        {/* Use Cases Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="mx-auto mt-16 grid max-w-6xl gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
           {useCases.map((useCase) => (
-            <div 
+            <div
               key={useCase.title}
-              className="glass-card p-8 hover-lift group"
+              className="bg-black p-8 transition-[filter] duration-200 hover:brightness-110 md:p-10"
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                <useCase.icon className="w-6 h-6 text-primary" />
+              <div className="mb-5 inline-flex rounded-sm border border-white/10 bg-tl-elevated p-2.5">
+                <useCase.icon className="h-5 w-5 text-white" strokeWidth={1.25} aria-hidden />
               </div>
-              <h4 className="text-lg font-semibold mb-3">{useCase.title}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {useCase.description}
-              </p>
+              <h4 className="text-base font-semibold text-white">{useCase.title}</h4>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-500">{useCase.description}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default UseCases;
+}

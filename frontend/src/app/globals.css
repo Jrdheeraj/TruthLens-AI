@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --tl-bg: #000000;
+    --tl-elevated: #0a0a0a;
+    --tl-panel: #111111;
+    --tl-border: rgba(255, 255, 255, 0.08);
+    --tl-border-strong: rgba(255, 255, 255, 0.12);
+    --tl-text: #ffffff;
+    --tl-body: #a1a1aa;
+    --tl-muted: #71717a;
+    --tl-violet: #7c3aed;
+    --tl-violet-bright: #a78bfa;
+    --tl-accent-from: #8b5cf6;
+    --tl-accent-mid: #6366f1;
+    --tl-accent-to: #34d399;
+
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 0 0% 8%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 262 83% 58%;
+    --radius: 0.375rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased;
+    background-color: var(--tl-bg);
+    color: var(--tl-body);
+  }
+}
+
+@layer utilities {
+  .tl-grid-bg {
+    background-color: var(--tl-bg);
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: center top;
+    mask-image: radial-gradient(ellipse 100% 80% at 50% -10%, #000 0%, transparent 65%);
+  }
+
+  .tl-grid-section {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(90deg, #c4b5fd 0%, #8b5cf6 35%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .border-tl {
+    border-color: var(--tl-border);
+  }
+
+  .border-tl-strong {
+    border-color: var(--tl-border-strong);
+  }
+}

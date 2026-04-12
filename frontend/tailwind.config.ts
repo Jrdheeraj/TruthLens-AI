@@ -2,21 +2,44 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1280px",
       },
     },
     extend: {
+      fontSize: {
+        xs: "0.875rem",
+        sm: "1rem",
+        base: "1.125rem",
+        lg: "1.375rem",
+        xl: "1.5rem",
+        "2xl": "1.875rem",
+        "3xl": "2.25rem",
+        "4xl": "2.75rem",
+        "5xl": "3.5rem",
+        "6xl": "4rem",
+      },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
       },
       colors: {
+        tl: {
+          bg: "#000000",
+          elevated: "#0A0A0A",
+          panel: "#111111",
+          border: "#1F1F1F",
+          heading: "#FFFFFF",
+          body: "#A1A1AA",
+          muted: "#71717A",
+          violet: "#7C3AED",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -50,21 +73,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
-        verdict: {
-          true: "hsl(var(--verdict-true))",
-          fake: "hsl(var(--verdict-fake))",
-          uncertain: "hsl(var(--verdict-uncertain))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,44 +88,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "fade-in": {
-          "0%": { opacity: "0", transform: "translateY(16px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "fade-in-slow": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        "slide-up": {
-          "0%": { opacity: "0", transform: "translateY(24px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "pulse-subtle": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.7" },
-        },
-        "scan-line": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100%)" },
-        },
-        "progress-fill": {
-          "0%": { width: "0%" },
-          "100%": { width: "var(--progress-value)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.6s ease-out forwards",
-        "fade-in-slow": "fade-in-slow 1s ease-out forwards",
-        "slide-up": "slide-up 0.8s ease-out forwards",
-        "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
-        "scan-line": "scan-line 2s ease-in-out infinite",
-        "progress-fill": "progress-fill 1s ease-out forwards",
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'hero-gradient': 'linear-gradient(135deg, hsl(222 47% 5%) 0%, hsl(230 45% 8%) 50%, hsl(222 47% 5%) 100%)',
       },
     },
   },

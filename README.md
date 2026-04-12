@@ -53,7 +53,7 @@ TruthLens AI uses a decoupled, modular architecture designed for stability and s
 ### Backend
 -   **Python & FastAPI**: High-performance asynchronous API handling.
 -   **Uvicorn**: Scalable production server for Python.
--   **Gemini (Google AI)**: The core reasoning model for claim verification.
+-   **Groq Llama-3.1-70B**: The core reasoning model for claim verification (60% faster than Gemini).
 -   **OpenCV & Tesseract**: For visual feature extraction and OCR.
 -   **moviepy & librosa**: (Beta) For video processing and audio artifact detection.
 
@@ -84,30 +84,42 @@ npm run dev
 
 ### 3. Backend Setup
 ```bash
-cd backend
+# Create single venv in root directory (if not already created)
 python -m venv venv
+
+# Activate venv
 # Windows:
 .\venv\Scripts\activate
 # Mac/Linux:
 source venv/bin/activate
 
+# Install all dependencies
 pip install -r requirements.txt
+
+# Start backend
+cd backend
 python run.py
 ```
 *Backend runs at: http://localhost:9000*
 
 ## 🔑 Environment Variables
 
-### Frontend (`frontend/.env`)
+### Root Directory (`.env`)
+```env
+# Groq API Configuration
+GROQ_API_KEY=gsk_your_groq_api_key_here
+```
+
+### Frontend (`frontend/.env` - Optional)
 ```env
 VITE_API_BASE_URL=http://localhost:9000/api
 ```
 
-### Backend (`backend/.env`)
-```env
-GOOGLE_API_KEY=your_gemini_api_key_here
-```
-*Note: Ensure your keys are never committed to version control.*
+**Note:** 
+- Store `.env` in the root project directory
+- All backend configuration reads from root `.env`
+- Never commit `.env` to version control
+- Get GROQ_API_KEY from: https://console.groq.com/
 
 ## 📂 API Documentation
 
