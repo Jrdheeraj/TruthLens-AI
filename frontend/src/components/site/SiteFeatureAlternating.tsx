@@ -24,10 +24,10 @@ export default function SiteFeatureAlternating() {
               The Difference
             </h2>
             <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-white md:text-3xl lg:text-4xl">
-              Why TruthLens AI
+              Built For Verification Teams
             </h3>
             <p className="mt-4 max-w-md text-base leading-relaxed text-zinc-400 md:text-lg">
-              Purpose-built for the misinformation age, not retrofitted from generic AI.
+              Your analysts get transparent reasoning, live source context, and cross-modal validation in one workflow.
             </p>
             <PurpleLink href="#verify">Verify Content</PurpleLink>
           </div>
@@ -49,11 +49,10 @@ export default function SiteFeatureAlternating() {
               Verification
             </h2>
             <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-white md:text-3xl lg:text-4xl">
-              Verify Content With Clarity
+              Signal Over Noise
             </h3>
             <p className="mt-4 max-w-md text-base leading-relaxed text-zinc-400 md:text-lg">
-              Upload or paste content to verify, then review a concise result with confidence and an easy-to-read
-              explanation.
+              Decision-ready outputs with confidence scoring, traceable evidence, and concise explanations your team can trust.
             </p>
             <PurpleLink href="#verify">Analyze Content</PurpleLink>
           </div>

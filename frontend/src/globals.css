@@ -1,9 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --font-geist-sans: "Manrope";
+    --font-geist-mono: "IBM Plex Mono";
     --tl-bg: #000000;
     --tl-elevated: #0a0a0a;
     --tl-panel: #111111;
@@ -51,7 +55,15 @@
   body {
     @apply antialiased;
     background-color: var(--tl-bg);
+    background-image:
+      radial-gradient(ellipse 90% 60% at 70% -10%, rgba(124, 58, 237, 0.18), transparent 60%),
+      radial-gradient(ellipse 80% 50% at 10% 120%, rgba(52, 211, 153, 0.08), transparent 60%);
     color: var(--tl-body);
+  }
+
+  ::selection {
+    background: rgba(124, 58, 237, 0.35);
+    color: #ffffff;
   }
 }
 
@@ -86,5 +98,26 @@
 
   .border-tl-strong {
     border-color: var(--tl-border-strong);
+  }
+
+  .tl-surface {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+  }
+
+  .tl-chip {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tl-card-hover {
+    transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+  }
+
+  .tl-card-hover:hover {
+    transform: translateY(-3px);
+    border-color: rgba(167, 139, 250, 0.45);
+    background-color: rgba(124, 58, 237, 0.08);
   }
 }

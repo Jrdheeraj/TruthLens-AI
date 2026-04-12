@@ -37,18 +37,18 @@ export default function SiteUseCases() {
             Applications
           </h2>
           <h3 className="mt-4 text-3xl font-semibold tracking-[-0.03em] text-white md:text-4xl lg:text-5xl">
-            Real-World Impact
+            Teams That Rely On TruthLens
           </h3>
           <p className="mt-4 text-base text-zinc-400 md:text-lg">
             Trusted by professionals who need reliable truth verification at scale.
           </p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-6xl gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-16 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {useCases.map((useCase) => (
             <div
               key={useCase.title}
-              className="bg-black p-8 transition-[filter] duration-200 hover:brightness-110 md:p-10"
+              className="tl-surface tl-card-hover bg-black p-8 md:p-10"
             >
               <div className="mb-5 inline-flex rounded-sm border border-white/10 bg-tl-elevated p-2.5">
                 <useCase.icon className="h-5 w-5 text-white" strokeWidth={1.25} aria-hidden />

@@ -1,6 +1,6 @@
 import { VerificationResponse } from "../types/api";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 export const verifyText = async (text: string): Promise<VerificationResponse> => {
   const response = await fetch(`${API_BASE_URL}/verify/text`, {

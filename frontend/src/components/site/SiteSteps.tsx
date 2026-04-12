@@ -133,20 +133,20 @@ export default function SiteSteps() {
       <div className="pointer-events-none absolute inset-0 tl-grid-section opacity-40" aria-hidden />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-mono text-[13px] font-medium tracking-[0.2em] text-violet-400/90 uppercase">
+          <h2 className="font-mono text-[12px] font-medium tracking-[0.2em] text-violet-400/90 uppercase">
             The Process
           </h2>
           <h3 className="mt-4 text-4xl font-semibold tracking-[-0.03em] text-white md:text-5xl lg:text-6xl">
-            From Chaos to Clarity
+            Upload, Verify, Decide.
           </h3>
           <p className="mt-4 text-lg text-zinc-400 md:text-xl">
-            Our four-step verification process transforms uncertain content into actionable truth.
+            TruthLens compresses noisy media into clear, evidence-backed outcomes in four production-ready steps.
           </p>
         </div>
 
-        <div className="mt-20 grid divide-y divide-white/10 md:grid-cols-2 md:divide-y-0 lg:grid-cols-4 lg:divide-x lg:divide-y-0 auto-rows-max">
+        <div className="mt-20 grid gap-4 md:grid-cols-2 lg:grid-cols-4 auto-rows-max">
           {steps.map((step, index) => (
-            <div key={step.title} className="px-0 py-10 lg:px-6 lg:py-0 first:lg:pl-0 last:lg:pr-0 flex flex-col h-full">
+            <div key={step.title} className="tl-surface tl-card-hover px-5 py-8 md:px-6 flex flex-col h-full">
               <div className="flex items-start gap-4 flex-1">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-violet-600 text-sm font-semibold text-white">
                   {index + 1}

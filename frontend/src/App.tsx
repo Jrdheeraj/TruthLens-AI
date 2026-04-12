@@ -11,7 +11,7 @@ import SiteFinalCta from "@/components/site/SiteFinalCta";
 import SiteUseCases from "@/components/site/SiteUseCases";
 import SiteFooter from "@/components/site/SiteFooter";
 
-export default function HomePage() {
+export default function App() {
   return (
     <div className="min-h-screen bg-black">
       <SiteNavbar />
