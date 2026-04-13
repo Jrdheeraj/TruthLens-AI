@@ -22,12 +22,15 @@ python-dotenv==1.0.0
 
 requests==2.31.0
 slowapi==0.1.9
-python-magic-bin==0.4.14
+python-magic-bin==0.4.14; platform_system == "Windows"
+python-magic==0.4.27; platform_system != "Windows"
 
 ddgs>=0.1.0
 
 groq>=1.1.2
 
 pytesseract==0.3.10
+pydub>=0.25.1
+SpeechRecognition>=3.10.0
 librosa>=0.10.0
 moviepy>=1.0.0
