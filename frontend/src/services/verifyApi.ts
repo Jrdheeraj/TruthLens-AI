@@ -1,9 +1,9 @@
 import { VerificationResponse } from "../types/api";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:9000").replace(/\/$/, "");
 
 export const verifyText = async (text: string): Promise<VerificationResponse> => {
-  const response = await fetch(`${API_BASE_URL}/verify/text`, {
+  const response = await fetch(`${API_URL}/verify/text`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const verifyImage = async (file: File): Promise<VerificationResponse> => 
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_BASE_URL}/verify/image`, {
+  const response = await fetch(`${API_URL}/verify/image`, {
     method: "POST",
     body: formData,
   });
@@ -40,7 +40,7 @@ export const verifyVideo = async (file: File): Promise<VerificationResponse> => 
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_BASE_URL}/verify/video`, {
+  const response = await fetch(`${API_URL}/verify/video`, {
     method: "POST",
     body: formData,
   });
@@ -58,7 +58,7 @@ export const verifyMultimodal = async (text: string, file?: File): Promise<Verif
   if (text) formData.append("text", text);
   if (file) formData.append("file", file);
 
-  const response = await fetch(`${API_BASE_URL}/verify/multimodal`, {
+  const response = await fetch(`${API_URL}/verify/multimodal`, {
     method: "POST",
     body: formData,
   });
