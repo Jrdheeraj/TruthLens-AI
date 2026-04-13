@@ -6,6 +6,41 @@ from app.utils.search_query_generator import generate_search_query, _extract_sub
 logger = logging.getLogger(__name__)
 
 
+async def safe_rag_call(rag: AgenticRAG, claim: str, timeout: int = 20, content_type: str = "text") -> dict:
+    """Run RAG with hard timeout and guaranteed fallback payload."""
+    logger.info(f"safe_rag_call: starting for claim '{claim[:80]}'")
+    try:
+        result = await asyncio.wait_for(rag.run(claim, content_type=content_type), timeout=timeout)
+        if not isinstance(result, dict):
+            logger.warning("safe_rag_call: invalid payload type, fallback triggered")
+            return {
+                "verdict": "FALSE",
+                "confidence": 50,
+                "reasoning": "Invalid RAG payload - system fallback triggered",
+                "key_evidence": "",
+                "sources": [],
+            }
+        return result
+    except asyncio.TimeoutError:
+        logger.error(f"safe_rag_call: timeout after {timeout}s")
+        return {
+            "verdict": "FALSE",
+            "confidence": 50,
+            "reasoning": "System fallback due to timeout or retrieval failure",
+            "key_evidence": "",
+            "sources": [],
+        }
+    except Exception as exc:
+        logger.error(f"safe_rag_call: exception {type(exc).__name__}: {exc}")
+        return {
+            "verdict": "FALSE",
+            "confidence": 50,
+            "reasoning": "System fallback due to timeout or retrieval failure",
+            "key_evidence": "",
+            "sources": [],
+        }
+
+
 def generate_corrected_fact(original_claim: str, reasoning: str, evidence: str) -> str:
     """
     PART 4: Generate corrected fact for FALSE claims using LLM
@@ -87,28 +122,26 @@ async def verify_text_claims(claims: list[str], image_context: dict = None) -> l
     
     results = []
     rag = AgenticRAG()
+    content_type = "text"
+    if isinstance(image_context, dict):
+        if image_context.get("video_type") == "video":
+            content_type = "video"
+        elif image_context:
+            content_type = "image"
     
     for claim in claims:
         try:
             logger.info(f"Verifying claim: {claim}")
-            
-            # Run Agentic RAG pipeline for this claim (with timeout)
-            try:
-                rag_result = await asyncio.wait_for(rag.run(claim), timeout=25)  # 20s RAG + 5s buffer
-            except asyncio.TimeoutError:
-                logger.warning(f"RAG timeout for claim: {claim[:100]}")
-                rag_result = {
-                    "verdict": "FALSE",
-                    "confidence": 0,
-                    "reasoning": "Verification timeout - claim could not be verified in time",
-                    "key_evidence": "",
-                    "sources": []
-                }
+
+            # Run Agentic RAG pipeline with hard safety wrapper.
+            rag_result = await safe_rag_call(rag, claim, timeout=25, content_type=content_type)
             
             # Extract verdict and reasoning
             verdict = rag_result.get("verdict", "FALSE")  # TRUE or FALSE
             confidence = rag_result.get("confidence", 50)
             reasoning = rag_result.get("reasoning", "")
+            technical_details = rag_result.get("technical_details", "")
+            evidence_points = rag_result.get("evidence_points", [])
             key_evidence = rag_result.get("key_evidence", "")
             
             # Map TRUE/FALSE verdict to status format
@@ -123,8 +156,12 @@ async def verify_text_claims(claims: list[str], image_context: dict = None) -> l
             
             # Build explanation from reasoning and key evidence
             explanation = f"{reasoning}"
+            if evidence_points:
+                explanation += "\n\nWhat we found: " + " | ".join(str(point) for point in evidence_points[:2])
             if key_evidence:
                 explanation += f"\n\nKey Evidence: {key_evidence}"
+            if technical_details:
+                explanation += f"\n\nTechnical note: {technical_details}"
             
             # Build sources list from evidence (if returned by RAG)
             sources = rag_result.get("sources", [])
@@ -137,7 +174,17 @@ async def verify_text_claims(claims: list[str], image_context: dict = None) -> l
                         "title": source.get("title", "Unknown Source"),
                         "source": source.get("source", "Web Search"),
                         "type": source.get("type", "web"),
-                        "description": source.get("text", "")[:300] if source.get("text") else ""
+                        "description": (
+                            source.get("description")
+                            or source.get("snippet")
+                            or source.get("text", "")
+                        )[:300]
+                        if (
+                            source.get("description")
+                            or source.get("snippet")
+                            or source.get("text")
+                        )
+                        else ""
                     })
             else:
                 # Fallback: generate sources from query generators
@@ -156,7 +203,10 @@ async def verify_text_claims(claims: list[str], image_context: dict = None) -> l
                 "status": status,
                 "sources": structured_sources,
                 "explanation": explanation,
-                "confidence": confidence
+                "confidence": confidence,
+                "summary": reasoning,
+                "technical_details": technical_details,
+                "evidence_points": evidence_points,
             }
             
             # Add corrected fact if available

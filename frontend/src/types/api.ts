@@ -42,7 +42,15 @@ export interface VerificationResponse {
     confidence: number;
     confidence_justification?: string;
     summary?: string;
-    explanation?: string;
+    explanation?:
+        | string
+        | {
+              summary?: string;
+              key_points?: string[];
+              points?: string[];
+              technical?: string;
+          };
+    explanation_text?: string;
     actual_information?: string;
     what_matches_evidence_better?: string;
     sources_note?: string;

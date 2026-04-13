@@ -11,9 +11,13 @@ from app.utils.serialization import sanitize_response, to_python_type
 # NEW: Mediapipe for accurate face landmark detection
 try:
     import mediapipe as mp
-    _mp_face_mesh = mp.solutions.face_mesh
-    _mp_drawing = mp.solutions.drawing_utils
-    MEDIAPIPE_AVAILABLE = True
+    _mp_solutions = getattr(mp, "solutions", None)
+    _mp_face_mesh = getattr(_mp_solutions, "face_mesh", None) if _mp_solutions else None
+    _mp_drawing = getattr(_mp_solutions, "drawing_utils", None) if _mp_solutions else None
+    MEDIAPIPE_AVAILABLE = _mp_face_mesh is not None and _mp_drawing is not None
+    if not MEDIAPIPE_AVAILABLE:
+        logger_temp = logging.getLogger(__name__)
+        logger_temp.warning("Mediapipe import succeeded but solutions API is unavailable - using fallback face detection")
 except (ImportError, AttributeError) as e:
     MEDIAPIPE_AVAILABLE = False
     logger_temp = logging.getLogger(__name__)

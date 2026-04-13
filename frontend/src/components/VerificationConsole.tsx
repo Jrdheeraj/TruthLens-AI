@@ -139,8 +139,25 @@ const VerificationConsole = () => {
   const isReal = resolvedStatus === "TRUE";
   const isFalseLike = resolvedStatus === "FALSE";
 
+  const explanationSummary =
+    result && typeof result.explanation === "object"
+      ? (result.explanation.summary || "").trim()
+      : "";
+
+  const explanationPoints =
+    result &&
+    typeof result.explanation === "object" &&
+    Array.isArray(result.explanation.key_points || result.explanation.points)
+      ? (result.explanation.key_points || result.explanation.points || []).filter((p) => Boolean(p && p.trim()))
+      : [];
+
+  const explanationTechnical =
+    result && typeof result.explanation === "object"
+      ? (result.explanation.technical || "").trim()
+      : "";
+
   const explanationText = result
-    ? result.explanation?.trim() ||
+    ? (typeof result.explanation === "string" ? result.explanation.trim() : explanationSummary || result.explanation_text?.trim()) ||
       (isReal
         ? "This content appears to be authentic based on the available evidence. The structure, wording, and contextual signals are consistent with known reliable patterns, and no major anomalies were detected during the verification pass."
         : "This content appears to be AI-generated or misleading because several structural and contextual patterns do not align with trusted evidence. Signals such as inconsistent phrasing, atypical media characteristics, or unsupported claims are commonly associated with synthetic or manipulated content.")
@@ -308,6 +325,16 @@ const VerificationConsole = () => {
               <div>
                 <h4 className="mb-2 text-sm font-medium text-zinc-500">Explanation</h4>
                 <p className="whitespace-pre-wrap text-[15px] leading-7 text-zinc-400 md:text-base">{explanationText}</p>
+                {explanationPoints.length > 0 && (
+                  <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-400">
+                    {explanationPoints.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                )}
+                {explanationTechnical && (
+                  <p className="mt-3 text-xs text-zinc-500">Technical note: {explanationTechnical}</p>
+                )}
               </div>
 
               {(result.what_matches_evidence_better || actualInfo) && isFalseLike && (

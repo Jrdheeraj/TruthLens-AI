@@ -24,6 +24,7 @@ share/python-wheels/
 *.egg
 MANIFEST
 venv/
+.venv/
 ENV/
 env/
 
@@ -39,6 +40,7 @@ dist-ssr/
 .next/
 out/
 build/
+.vercel/
 
 # Environment Variables (CRITICAL)
 .env
@@ -64,8 +66,3 @@ backend/app/live/__pycache__/
 backend/app/llm/__pycache__/
 backend/app/utils/__pycache__/
 backend/temp/
-*.mp4
-*.wav
-*.png
-*.jpg
-*.jpeg

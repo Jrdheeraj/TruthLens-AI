@@ -362,7 +362,7 @@ async def verify_image(request: Request, file: UploadFile = File(...)):
                 try:
                     rag_system = AgenticRAG()
                     query = f"Image analysis: {image_caption}. Is this accurate?"
-                    rag_result = await rag_system.run(query)
+                    rag_result = await rag_system.run(query, content_type="image")
                     logger.info(f"Image caption RAG query executed")
                 except Exception as e:
                     logger.warning(f"Image caption RAG failed: {e}")
@@ -674,7 +674,7 @@ Focus only on:
 - synthetic media
 - AI-generated visuals
 """.strip()
-                    rag_result = await rag_system.run(query)
+                    rag_result = await rag_system.run(query, content_type="video")
                     if isinstance(rag_result, dict):
                         rag_result["sources"] = _filter_forensic_sources(rag_result.get("sources", []))[:8]
                     logger.info(f"RAG executed for multimodal video analysis (caption + audio)")

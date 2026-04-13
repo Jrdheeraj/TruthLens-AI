@@ -41,8 +41,13 @@ def validate_dependencies():
     
     try:
         import mediapipe
-        dependency_status["mediapipe"] = True
-        logger.info(f"✓ MediaPipe available")
+        solutions = getattr(mediapipe, "solutions", None)
+        face_mesh = getattr(solutions, "face_mesh", None) if solutions else None
+        if solutions is None or face_mesh is None:
+            logger.warning("⚠️ MediaPipe installed but solutions API is unavailable")
+        else:
+            dependency_status["mediapipe"] = True
+            logger.info("✓ MediaPipe available (solutions API validated)")
     except ImportError as e:
         logger.warning(f"⚠️ MediaPipe not available: {e}")
     

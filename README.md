@@ -1,190 +1,328 @@
-# TruthLens AI: Multimodal Fact Verification Engine
+<div align="center">
 
-![Version](https://img.shields.io/badge/version-1.6.4-blue)
-![Python](https://img.shields.io/badge/python-3.9+-yellow)
-![React](https://img.shields.io/badge/react-18-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+# TruthLens AI
 
-TruthLens AI is a production-grade investigative tool designed to combat the global epidemic of misinformation. It provides an automated, evidence-based platform for verifying the authenticity of text claims, images, and combined multimodal content using real-time internet cross-referencing and advanced AI reasoning.
+### See through the noise.
 
-## 🎯 Overview
+**A startup-grade multimodal verification platform for text, image, video, and combined content.**
 
-In an era of deepfakes and algorithmic disinformation, TruthLens AI bridges the gap between raw content and verified truth. Unlike traditional search engines, TruthLens AI extracts specific factual claims and performs a deep "Investigative Audit" by retrieving live evidence from credible sources (Wikipedia, Google Search via DuckDuckGo) and synthesizing a human-readable verdict with a clear **"Why"** justification.
+*Fast, explainable, and evidence-driven verification powered by Agentic RAG + AI reasoning.*
 
-## ✨ Key Features
+![Python](https://img.shields.io/badge/Python-3.9%2B-yellow)
+![Node](https://img.shields.io/badge/Node.js-18%2B-339933)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![React](https://img.shields.io/badge/React-18-blue)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF)
+![Status](https://img.shields.io/badge/Status-Active%20Development-1f6feb)
+![License](https://img.shields.io/badge/License-MIT-green)
 
--   **Text Fact Verification**: Extracts individual claims from raw text and verifies them against the latest global events (Context-aware for Jan 2026).
--   **Image Analysis & OCR**: Scans images for synthetic artifacts, composition errors, and extracts text embedded within images to catch "Meme-based" disinformation.
--   **Multimodal Reasoning**: Analyzes text and images **together** to detect cross-modal inconsistencies (e.g., a peaceful text description paired with a violent image).
--   **Live Web Cross-Checking (RAG)**: Uses Retrieval-Augmented Generation to weight real-world evidence higher than static LLM training data.
--   **Explainable AI (XAI)**: Every verdict includes a structured **Expert Reasoning** box explaining exactly *why* information was flagged.
--   **Defensive Error Handling**: Aggressive heuristics catch disinformation even when external APIs or search snippets are sparse.
+</div>
 
-## 🏗️ System Architecture
+---
 
-TruthLens AI uses a decoupled, modular architecture designed for stability and speed:
+## 🎥 Demo / Preview
 
-1.  **Frontend (React + Vite + TypeScript)**: A high-performance investigative console built with Tailwind CSS for glassmorphism aesthetics.
-2.  **Backend (FastAPI)**: A high-concurrency Python server managing the analysis pipeline.
-3.  **Analysis Pipeline**:
-    -   **Claim Extractor**: Identifies verifiable factual units within user input.
-    -   **Search Engine (ddgs)**: Retrieves live snippets from the web.
-    -   **Evaluation Model (Gemini)**: Performs deep semantic reasoning on claims vs evidence.
-    -   **Verdict Engine**: A deterministic logic layer that aggregates LLM scores, visual risks, and audio artifacts into a final confidence score (0.0–1.0).
-    -   **Explanation Tree**: Synthesizes a structured JSON reasoning path for frontend rendering.
+Add screenshots or GIF walkthroughs here.
 
-## 🚀 How It Works (Step-by-Step)
+- App landing + verification console
+- Text verification result view
+- Image/video verification with explanation and sources
 
-1.  **Submission**: User uploads text, an image, or both to the **Combined Console**.
-2.  **Extraction**: Text is parsed into discrete claims; images are captioned and OCRed.
-3.  **Retrieval**: The system searches DuckDuckGo and Wikipedia for contemporary evidence.
-4.  **Audit**: The AI evaluates if the evidence *supports*, *contradicts*, or is *silent* regarding the claims.
-5.  **Synthesis**: The Verdict Engine checks for "Hoax Patterns" and Cross-Modal mismatches.
-6.  **Delivery**: The UI renders a verdict (TRUE/FAKE/MISLEADING) with a highlighted **"Why this verdict?"** reason.
+> Suggested: place screenshots in `frontend/public/preview/` and reference them here.
 
-## 🛠️ Technologies Used
+---
 
-### Frontend
--   **React**: For reactive state management of investigative results.
--   **Vite**: For ultra-fast development and build cycles.
--   **TypeScript**: Ensures type safety across complex JSON API responses.
--   **Tailwind CSS**: Modern styling with dark-mode investigative aesthetics.
+## ⚡ Quick Start
 
-### Backend
--   **Python & FastAPI**: High-performance asynchronous API handling.
--   **Uvicorn**: Scalable production server for Python.
--   **Groq Llama-3.1-70B**: The core reasoning model for claim verification (60% faster than Gemini).
--   **OpenCV & Tesseract**: For visual feature extraction and OCR.
--   **moviepy & librosa**: (Beta) For video processing and audio artifact detection.
+Run the project quickly with the essentials:
 
-### Data Sources
--   **DuckDuckGo Search**: For real-time news and snippet retrieval.
--   **Wikipedia API**: For established scientific and historical consensus.
-
-## 📦 Installation Guide
-
-### Prerequisites
--   [Node.js](https://nodejs.org/) (v18+)
--   [Python](https://www.python.org/) (v3.9+)
--   [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) (Installed and in PATH)
-
-### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/TruthLens-AI.git
-cd TruthLens-AI
-```
+git clone <your-repo-url>
+cd "TruthLens AI"
 
-### 2. Frontend Setup
-```bash
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+
+cd backend
+python run.py
+
+# in a new terminal
 cd frontend
 npm install
 npm run dev
 ```
-*Frontend runs at: http://localhost:8080*
 
-### 3. Backend Setup
+---
+
+## 🚀 Overview
+TruthLens AI helps users verify suspicious content in a simple, practical workflow.
+
+Instead of only searching keywords, it runs a full verification pipeline:
+- Extracts claims from text
+- Analyzes media signals (visual/audio/motion)
+- Retrieves supporting evidence from trusted sources
+- Produces a clear verdict with explanation and references
+
+It is built for real-world misinformation checks, deepfake suspicion, newsroom triage, and fast decision support.
+
+---
+
+## ✨ Features
+- 🧾 **Text Verification**: Convert raw claims into evidence-backed verdicts, quickly.
+- 🖼️ **Image Analysis**: Detect synthetic patterns and extract meaningful visual context.
+- 🎬 **Video Analysis**: Combine frame, audio, and motion signals to flag manipulation risk.
+- 🧠 **Agentic RAG**: Use smarter, shorter, context-aware queries for better retrieval quality.
+- 🔍 **Evidence You Can Use**: Get source links with readable notes, not noisy dumps.
+- ⚡ **Production-Ready Reliability**: Async-safe, timeout-bounded, fallback-protected pipeline.
+- 🧱 **Deterministic Verdict Core**: Consistent `TRUE` / `FALSE` decisions with confidence scoring.
+- 🎯 **Human-Readable Explanations**: ChatGPT-style summary, key points, and short technical notes.
+
+---
+
+## 🔄 System Flow
+
+```text
+User Input → Media/Text Analysis → Agentic RAG Retrieval → Verdict Engine → Clear Explanation + Sources
+```
+
+Step view:
+1. **User Input** submits text/image/video/combined content.
+2. **Analysis Layer** extracts claims and media signals.
+3. **RAG Layer** retrieves and filters relevant evidence.
+4. **Verdict Layer** computes final decision and confidence.
+5. **Explanation Layer** generates a user-friendly result with supporting sources.
+
+---
+
+## 🧠 How It Works
+1. **Input**: User submits text, image, video, or mixed content.
+2. **Preprocessing**: Claims are extracted; media metadata/features are analyzed.
+3. **Query Planning**: RAG generates short, context-aware search queries.
+4. **Retrieval**: System gathers evidence from web/wiki/news sources.
+5. **Filtering + Ranking**: Irrelevant/noisy evidence is removed.
+6. **Reasoning**: LLM + deterministic logic produce verdict and confidence.
+7. **Explanation**: User gets a clear explanation, key points, and source links.
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+- **FastAPI** + **Uvicorn**
+- **Python** (async pipeline)
+- **Groq API** (LLM reasoning)
+- **httpx** (async HTTP)
+- **slowapi** (rate limiting)
+- **python-magic-bin** (MIME validation)
+- **OpenCV / Torch / timm / transformers** (media analysis)
+- **pytesseract / librosa / moviepy** (OCR/audio/video)
+
+### Frontend
+- **React 18** + **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **Radix UI components**
+
+### Retrieval & Evidence
+- **DuckDuckGo (ddgs)**
+- **Wikipedia API**
+- Curated fallback references (Reuters, BBC, AP, Britannica)
+
+---
+
+## 📁 Project Structure
 ```bash
-# Create single venv in root directory (if not already created)
+TruthLens AI/
+├── backend/
+│   ├── run.py
+│   └── app/
+│       ├── main.py
+│       ├── api/
+│       │   └── verify.py
+│       ├── core/
+│       │   ├── claim_extractor.py
+│       │   ├── text_verifier.py
+│       │   ├── image_analyzer.py
+│       │   ├── video_analyzer.py
+│       │   ├── audio_analyzer.py
+│       │   └── verdict_engine.py
+│       ├── rag/
+│       │   └── agentic_rag.py
+│       ├── live/
+│       │   └── live_search.py
+│       ├── llm/
+│       │   └── evaluator.py
+│       └── utils/
+│           ├── explanation_tree.py
+│           └── serialization.py
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── types/
+│   │   └── App.tsx
+│   ├── package.json
+│   └── vite.config.ts
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- Tesseract OCR installed and available in system `PATH`
+
+### 1) Clone the project
+```bash
+git clone <your-repo-url>
+cd "TruthLens AI"
+```
+
+### 2) Backend setup
+```bash
+# from project root
 python -m venv venv
 
-# Activate venv
-# Windows:
+# Windows
 .\venv\Scripts\activate
-# Mac/Linux:
+
+# macOS/Linux
 source venv/bin/activate
 
-# Install all dependencies
 pip install -r requirements.txt
+```
 
-# Start backend
+Create a root `.env` file:
+```env
+GROQ_API_KEY=gsk_your_api_key_here
+# Optional
+# ALLOWED_ORIGINS=http://localhost:8080
+```
+
+### 3) Frontend setup
+```bash
+cd frontend
+npm install
+```
+
+---
+
+## ▶️ How to Run the Project
+
+### Terminal A: Backend
+```bash
 cd backend
 python run.py
 ```
-*Backend runs at: http://localhost:9000*
+Backend runs on: `http://127.0.0.1:9000`
 
-## 🔑 Environment Variables
-
-### Root Directory (`.env`)
-```env
-# Groq API Configuration
-GROQ_API_KEY=gsk_your_groq_api_key_here
+### Terminal B: Frontend
+```bash
+cd frontend
+npm run dev
 ```
+Frontend runs on: `http://localhost:8080`
 
-### Frontend (`frontend/.env` - Optional)
-```env
-VITE_API_BASE_URL=http://localhost:9000/api
-```
+> Vite proxy is preconfigured so `/api/*` calls go to backend `127.0.0.1:9000`.
 
-**Note:** 
-- Store `.env` in the root project directory
-- All backend configuration reads from root `.env`
-- Never commit `.env` to version control
-- Get GROQ_API_KEY from: https://console.groq.com/
+---
 
-## 📂 API Documentation
+## 🧪 Example Usage
 
-### `POST /api/verify/multimodal`
-The primary endpoint for coordinated verification.
+### Text
+1. Open the app.
+2. Select **Text** tab.
+3. Paste a claim.
+4. Click **Run Verification**.
 
-**Request Payload (Multipart/Form-data):**
-- `text`: "The Earth is flat."
-- `file`: (Optional) Image or short video file.
+### Image
+1. Select **Image** tab.
+2. Upload an image (`jpg/png/webp/gif`).
+3. Run verification.
 
-**Response JSON Example:**
+### Video
+1. Select **Video** tab.
+2. Upload a supported video (`mp4/mpeg/mov/avi`).
+3. Run verification.
+
+### Combined
+1. Select **Combined** tab.
+2. Enter text + optional image.
+3. Run verification.
+
+---
+
+## 📊 Output Format
+
+Each verification returns a product-ready response with verdict, confidence, explanation, and evidence sources.
+
 ```json
 {
-  "verdict": "LIKELY FAKE",
-  "confidence": 0.95,
-  "reasoning": [
+  "verdict": "TRUE",
+  "status": "TRUE",
+  "confidence": 82,
+  "explanation": {
+    "summary": "✅ This content appears to be real.",
+    "key_points": [
+      "Claim matches trusted cross-source references",
+      "No strong synthetic/manipulation signals detected",
+      "Context and timeline are consistent"
+    ],
+    "technical": "Technical note: weighted evidence and model consistency checks support this verdict."
+  },
+  "sources": [
     {
-      "step": "Text Claim Verification",
-      "status": "CONTRADICTED",
-      "details": { "explanation": "Scientific consensus and satellite imagery prove Earth is an oblate spheroid." }
-    },
-    {
-      "step": "Final Decision",
-      "details": { "summary": "Identified as Fake. Core Reason: Explicitly refuted by credible sources." }
+      "title": "Reuters Search",
+      "url": "https://www.reuters.com/site-search/?query=...",
+      "note": "Credible news reporting search results."
     }
   ]
 }
 ```
 
-## 🧪 Example Outputs
-
-| Input | Verdict | Confidence | Expert Reasoning |
-| :--- | :--- | :--- | :--- |
-| "The Earth is a sphere" | **LIKELY TRUE** | 0.85+ | Verified as True. Core Reason: Matches established factual consensus. |
-| "Drinking bleach cures viruses" | **LIKELY FAKE** | 0.95 | Identified as Fake. Core Reason: Credible sources explicitly refute this claim. |
-| Combined: [Riot Image] + "Peaceful" | **MISLEADING** | 0.70 | Caution: Content contains multimodal contradictions. |
-| "Future AI will be sentient" | **UNCERTAIN** | 0.35 | Uncertain. Reason: Insufficient external evidence found. |
-
-## 🛡️ Reliability & Error Handling
-
--   **Zero 500 Errors**: All external API calls (Gemini, Search) are wrapped in failover try/except blocks.
--   **Smart Heuristics**: If the LLM is overloaded or the key expires, a local keyword-risk engine provides fallback analysis.
--   **Confidence Calibration**: Confidence scores are evidence-driven, not arbitrary. High scores require multi-source agreement.
-
-## ⚠️ Limitations
-
--   **Source Dependency**: Performance is linked to the availability of external search results.
--   **Not a Human Proxy**: TruthLens AI is a tool to *assist* high-stakes decision-making, not a replacement for professional human fact-checkers.
--   **Image Quality**: Extremely low-resolution images may degrade OCR and artifact detection accuracy.
-
-## 🔮 Future Enhancements
-
--   **Browser Extension**: Rapid verification of news articles directly in Chrome/Edge.
--   **Source Credibility Scoring**: Real-time ranking of the domain's historical accuracy.
--   **Multilingual Support**: Expanding verification to 50+ languages.
-
-## 📄 License & Contribution
-
-Distributed under the **MIT License**. We welcome contributions that improve the accuracy and speed of truth detection! 
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+What users experience in the UI:
+- Clear verdict badge
+- Confidence score with justification
+- Natural-language explanation
+- Source cards with links and short notes
 
 ---
-**TruthLens AI** — *See through the noise.*
+
+## 🔐 Reliability & Safety Highlights
+- Strict file size + MIME validation for uploads
+- Rate limits on verification endpoints
+- Timeout-bounded async retrieval and reasoning
+- Circuit-breaker style fallback behavior for unstable providers
+- Graceful error handling with deterministic fallback verdicts
+
+---
+
+## 🧩 Future Improvements
+- Browser extension for one-click verification
+- Source credibility scoring model
+- Better multilingual claim extraction
+- Batch verification mode for newsroom workflows
+
+---
+
+## 🤝 Contribution
+Contributions are welcome.
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**.
+
+---
+
+### ⭐ If this project helps you, consider starring the repository.
