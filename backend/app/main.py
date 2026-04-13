@@ -147,7 +147,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content=content,
     )
 
-app.include_router(verify_router, prefix="/api")
+app.include_router(verify_router)
 
 @app.get("/")
 def health():
