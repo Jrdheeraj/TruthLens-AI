@@ -37,7 +37,7 @@ if tesseract_path:
 
 from datetime import datetime
 
-router = APIRouter(tags=["Verification"])
+router = APIRouter(prefix="/verify", tags=["Verification"])
 
 
 def json_safe_response(response):
@@ -153,7 +153,7 @@ class StrictFactResponse(BaseModel):
     confidence: int
     reasoning: str
 
-@router.post("/verify/text")
+@router.post("/text")
 @limiter.limit("10/minute")
 async def verify_text(request: Request, payload: TextPayload):
     """Verify text claims - fully wrapped with error handling"""
@@ -234,7 +234,7 @@ async def verify_text(request: Request, payload: TextPayload):
         })
 
 
-@router.post("/verify/strict", response_model=StrictFactResponse)
+@router.post("/strict", response_model=StrictFactResponse)
 @limiter.limit("10/minute")
 async def verify_text_strict(request: Request, payload: TextPayload):
     if not payload.text or not payload.text.strip():
@@ -277,7 +277,7 @@ async def verify_text_strict(request: Request, payload: TextPayload):
         "reasoning": reasoning
     })
 
-@router.post("/verify/image")
+@router.post("/image")
 @limiter.limit("5/minute")
 async def verify_image(request: Request, file: UploadFile = File(...)):
     """Verify image content with file validation - fully wrapped with error handling"""
@@ -398,7 +398,7 @@ async def verify_image(request: Request, file: UploadFile = File(...)):
             except Exception as e:
                 logger.debug(f"Cleanup error: {e}")
 
-@router.post("/verify/multimodal")
+@router.post("/multimodal")
 @limiter.limit("5/minute")
 async def verify_multimodal(
     request: Request,
@@ -517,7 +517,7 @@ async def verify_multimodal(
             except Exception as e:
                 logger.debug(f"Cleanup error: {e}")
 
-@router.post("/verify/video")
+@router.post("/video")
 @limiter.limit("5/minute")
 async def verify_video(request: Request, file: UploadFile = File(...)):
     """Verify video content with file validation - fully wrapped with error handling"""
