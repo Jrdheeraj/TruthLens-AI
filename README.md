@@ -22,13 +22,9 @@
 
 ## 🎥 Demo / Preview
 
-Add screenshots or GIF walkthroughs here.
+[![TruthLens Homepage](frontend/src/assets/homepage.png)](https://truth-lens-ai-two.vercel.app/)
 
-- App landing + verification console
-- Text verification result view
-- Image/video verification with explanation and sources
-
-> Suggested: place screenshots in `frontend/public/preview/` and reference them here.
+Click the image to open the live homepage.
 
 ---
 
