@@ -1,15 +1,21 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import asyncio
 import traceback
 import os
 import logging
 import uuid
+from pathlib import Path
+from dotenv import load_dotenv
 from app.api.verify import router as verify_router
+from app.rag.agentic_rag import preload_embedding_model
 
 # Setup logging
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 logger = logging.getLogger(__name__)
+ROOT_ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(ROOT_ENV_PATH)
 
 # ============================================================================
 # PART 4: STARTUP VALIDATION - Check critical dependencies
@@ -90,6 +96,12 @@ async def on_startup():
     logger.info("=" * 60)
     logger.info("TruthLens AI Starting Up")
     logger.info("=" * 60)
+    load_dotenv(ROOT_ENV_PATH)
+    tavily_key = (os.getenv("TAVILY_API_KEY") or "").strip()
+    if not tavily_key:
+        raise RuntimeError("Tavily API key not loaded")
+    await asyncio.to_thread(preload_embedding_model)
+    logger.info("Semantic embedding model preloaded")
     logger.info(f"Dependency Status: {_dep_status}")
     if not _dep_status.get("cv2"):
         logger.error("CRITICAL: Media analysis will be degraded - OpenCV missing")

@@ -19,7 +19,7 @@ from app.core.image_analyzer import analyze_image, TESSERACT_AVAILABLE
 from app.core.verdict_engine import final_verdict
 from app.core.video_analyzer import analyze_video
 from app.core.audio_analyzer import analyze_audio
-from app.live.live_search import fetch_live_evidence, fetch_wikipedia_evidence
+from app.live.live_search import fetch_tavily_evidence, fetch_wikipedia_evidence
 from app.llm.evaluator import evaluate_claim_with_llm
 from app.rag.agentic_rag import AgenticRAG
 from app.utils.serialization import sanitize_response
@@ -251,7 +251,7 @@ async def verify_text_strict(request: Request, payload: TextPayload):
     subject_name = _extract_subject_name(claim)
 
     # Fetch evidence in parallel (async)
-    live_evidence = await fetch_live_evidence(precise_query, subject_name=subject_name)
+    live_evidence = await fetch_tavily_evidence(precise_query, subject_name=subject_name)
     wiki_evidence = await fetch_wikipedia_evidence(precise_query, subject_name=subject_name)
 
     evidence_text = ""

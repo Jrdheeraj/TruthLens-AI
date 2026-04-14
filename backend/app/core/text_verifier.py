@@ -107,9 +107,9 @@ async def verify_text_claims(claims: list[str], image_context: dict = None) -> l
     
     Agentic RAG performs:
     1. Query planning (decompose claim into sub-queries)
-    2. Parallel evidence retrieval (DuckDuckGo + Wikipedia + news)
+    2. Parallel evidence retrieval (Tavily + Wikipedia)
     3. Evidence fusion (deduplication, credibility scoring)
-    4. LLM reasoning (Groq with reflection loop)
+    4. Deterministic rule-based verdict
     5. Verdict generation (TRUE/FALSE only)
     
     Args:

@@ -121,9 +121,9 @@ Step view:
 - **Radix UI components**
 
 ### Retrieval & Evidence
-- **DuckDuckGo (ddgs)**
+- **Tavily API**
 - **Wikipedia API**
-- Curated fallback references (Reuters, BBC, AP, Britannica)
+- Curated fallback references (Reuters, BBC)
 
 ---
 
@@ -196,6 +196,7 @@ pip install -r requirements.txt
 Create a root `.env` file:
 ```env
 GROQ_API_KEY=gsk_your_api_key_here
+TAVILY_API_KEY=tvly_your_api_key_here
 # Optional
 # ALLOWED_ORIGINS=http://localhost:8080
 ```
